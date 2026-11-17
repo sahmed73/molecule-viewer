@@ -849,27 +849,48 @@ if (typeof document !== 'undefined') {
     message(`${label}: ${count.toLocaleString()} atoms${format === 'lammps' ? `, ${data.bondCount.toLocaleString()} bonds` : ''}.${format === 'lammps' && data.unknownTypes.length ? ` Unknown element types ${data.unknownTypes.join(', ')} are shown as X.` : ''}`);
   }
 
-  for (const [id, file, label] of [
-    ['molecule-demo', 'pao-example.mol', 'PAO molecule'],
-    ['molecule-demo-zddp', 'zddp-dibutyl-example.mol', 'ZDDP (dibutyl)'],
-    ['molecule-demo-adpa', 'adpa-dioctyl-example.mol', 'ADPA (dioctyl)'],
-  ]) {
-    $(id).addEventListener('click', async () => {
-      const current = ++loadId;
-      try {
-        message('Loading example…');
-        const response = await fetch(new URL(file, import.meta.url));
-        if (!response.ok) throw new Error('Example file could not be loaded.');
-        const text = await response.text();
-        if (current === loadId) show(text, 'sdf', `Example: ${label}`);
-      } catch (error) { if (current === loadId) message(error.message, true); }
-    });
+  // Examples live in assets/examples/; each option in the dropdown names its file.
+  const exampleSelect = $('molecule-example');
+  const exampleNote = $('molecule-example-note');
+  const defaultExampleNote = exampleNote.textContent;
+  function describeExample(option) {
+    exampleNote.replaceChildren();
+    if (!option?.value) {
+      exampleNote.textContent = defaultExampleNote;
+      return;
+    }
+    const {note, cid, method} = option.dataset;
+    if (note) exampleNote.append(note, cid ? ' ' : '');
+    if (cid) {
+      const link = document.createElement('a');
+      link.href = `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`;
+      link.textContent = `PubChem CID ${cid}`;
+      exampleNote.append(link, '. ', method || '3D coordinates from RDKit (ETKDG + MMFF94).');
+    }
   }
+  function clearExample() {
+    exampleSelect.value = '';
+    describeExample(null);
+  }
+  exampleSelect.addEventListener('change', async () => {
+    const option = exampleSelect.selectedOptions[0];
+    describeExample(option);
+    if (!option?.value) return;
+    const current = ++loadId;
+    try {
+      message('Loading example…');
+      const response = await fetch(new URL(`examples/${option.value}`, import.meta.url));
+      if (!response.ok) throw new Error('Example file could not be loaded.');
+      const text = await response.text();
+      if (current === loadId) show(text, 'sdf', `Example: ${option.textContent}`);
+    } catch (error) { if (current === loadId) message(error.message, true); }
+  });
 
   $('molecule-file').addEventListener('change', async event => {
     const file = event.target.files[0];
     if (!file) return;
     const current = ++loadId;
+    clearExample();
     try {
       if (file.size > 10_000_000) throw new Error('Choose a file under 10 MB.');
       message(`Reading ${file.name}…`);
@@ -887,6 +908,7 @@ if (typeof document !== 'undefined') {
     const smiles = $('molecule-smiles').value.trim();
     if (!smiles || smiles.length > 500) return message('Enter a SMILES string of 1–500 characters.', true);
     const current = ++loadId;
+    clearExample();
     try {
       message('Requesting 3D coordinates from PubChem…');
       const response = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${encodeURIComponent(smiles)}/SDF?record_type=3d`, {signal: AbortSignal.timeout(20000)});

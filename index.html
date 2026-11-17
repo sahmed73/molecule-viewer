@@ -60,12 +60,48 @@
                 <small>Requests a 3D structure from <a href="https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest">PubChem</a>, with an RDKit fallback. The free RDKit service may take about a minute to wake.</small>
               </form>
 
-              <div class="molecule-examples" aria-label="Example molecules">
-                <span>Examples</span>
-                <button id="molecule-demo" type="button">PAO</button>
-                <button id="molecule-demo-zddp" type="button">ZDDP (dibutyl)</button>
-                <button id="molecule-demo-adpa" type="button">ADPA (dioctyl)</button>
-                <small>ZDDP: zinc bis(O,O-dibutyl dithiophosphate), with illustrative Zn–S geometry. ADPA: 4,4′-dioctyldiphenylamine.</small>
+              <div class="molecule-examples">
+                <label for="molecule-example">Examples</label>
+                <select id="molecule-example" aria-describedby="molecule-example-note">
+                  <option value="">Choose an example…</option>
+                  <optgroup label="Lubricant chemistry">
+                    <option value="pao.mol" data-note="Polyalphaolefin, a synthetic base oil.">PAO (base oil)</option>
+                    <option value="zddp-dibutyl.mol" data-note="Zinc bis(O,O-dibutyl dithiophosphate), an antiwear additive, with illustrative Zn–S geometry.">ZDDP (dibutyl)</option>
+                    <option value="zddp-sec-hexyl.mol" data-note="Zinc bis[O,O-di(hexan-2-yl) dithiophosphate], a secondary ZDDP, with (R) carbons. 3D coordinates from RDKit (ETKDG + UFF); the Zn–S geometry is approximate.">ZDDP (sec-hexyl)</option>
+                    <option value="adpa-dioctyl.mol" data-note="4,4′-Dioctyldiphenylamine, an aminic antioxidant.">ADPA (dioctyl)</option>
+                  </optgroup>
+                  <optgroup label="Everyday chemistry">
+                    <option value="water.mol" data-cid="962">Water</option>
+                    <option value="carbon-dioxide.mol" data-cid="280">Carbon dioxide</option>
+                    <option value="methane.mol" data-cid="297">Methane</option>
+                    <option value="ethanol.mol" data-cid="702">Ethanol</option>
+                    <option value="benzene.mol" data-cid="241">Benzene</option>
+                    <option value="caffeine.mol" data-cid="2519">Caffeine</option>
+                    <option value="nicotine.mol" data-cid="89594">Nicotine</option>
+                    <option value="capsaicin.mol" data-cid="1548943" data-note="The molecule that makes chili peppers hot.">Capsaicin</option>
+                    <option value="glucose.mol" data-cid="64689" data-note="β-D-glucopyranose, the ring form of glucose.">Glucose</option>
+                    <option value="vitamin-c.mol" data-cid="54670067" data-note="L-ascorbic acid.">Vitamin C</option>
+                  </optgroup>
+                  <optgroup label="Medicines">
+                    <option value="aspirin.mol" data-cid="2244">Aspirin</option>
+                    <option value="paracetamol.mol" data-cid="1983" data-note="Also called acetaminophen.">Paracetamol</option>
+                    <option value="ibuprofen.mol" data-cid="3672" data-note="Shown as the (S) enantiomer; the medicine is a mixture of both.">Ibuprofen</option>
+                    <option value="penicillin-g.mol" data-cid="5904">Penicillin G</option>
+                    <option value="morphine.mol" data-cid="5288826">Morphine</option>
+                  </optgroup>
+                  <optgroup label="Biology">
+                    <option value="atp.mol" data-cid="5957" data-note="Adenosine triphosphate, the cell's energy carrier.">ATP</option>
+                    <option value="dopamine.mol" data-cid="681">Dopamine</option>
+                    <option value="serotonin.mol" data-cid="5202">Serotonin</option>
+                    <option value="adrenaline.mol" data-cid="5816" data-note="Also called epinephrine.">Adrenaline</option>
+                    <option value="cholesterol.mol" data-cid="5997">Cholesterol</option>
+                    <option value="testosterone.mol" data-cid="6013">Testosterone</option>
+                  </optgroup>
+                  <optgroup label="Materials">
+                    <option value="buckminsterfullerene.mol" data-cid="123591" data-method="Ideal truncated icosahedron with 1.42 Å bonds." data-note="C60, the soccer-ball-shaped carbon cage.">Buckminsterfullerene (C60)</option>
+                  </optgroup>
+                </select>
+                <small id="molecule-example-note">Lubricant molecules from my research, plus well-known molecules from everyday life, medicine, and biology.</small>
               </div>
 
               <fieldset class="molecule-appearance">

@@ -42,13 +42,19 @@ node scripts/test_molecule_viewer.mjs
 ```
 
 The checks cover the LAMMPS parser, styles, export sizes, video bitrates, Studio
-geometry, and GIF encoding.
+geometry, GIF encoding, and that every example in the dropdown has a valid MOL file.
 
 ## How it works
 
 - Structure files (LAMMPS `.data`, MOL/SDF, PDB, XYZ) are read in the browser and never
-  uploaded. The PAO, ZDDP, and ADPA examples are in `assets/`. The ZDDP example uses
-  an illustrative four-sulfur arrangement around zinc, not a measured structure.
+  uploaded.
+- The Examples dropdown lists the MOL files in `assets/examples/`; each `<option>` in
+  `index.html` names its file. Lubricant examples: PAO, ZDDP (dibutyl, with an
+  illustrative Zn–S arrangement), ZDDP (sec-hexyl), and ADPA. Well-known molecules
+  (water, caffeine, aspirin, glucose, ATP, cholesterol, C60, and more) use PubChem
+  SMILES with RDKit 3D coordinates. `scripts/make_examples.py` rebuilds every example
+  except PAO, ZDDP (dibutyl), and ADPA, and checks each one's stereochemistry against
+  its PubChem InChIKey (needs `pip install rdkit`).
 - SMILES requests a 3D structure from PubChem, then falls back to an RDKit service on
   Render. That service's code and `render.yaml` live in the website repository
   (`rdkit-api/`), and its URL is set in `data-rdkit-api` in `index.html`.

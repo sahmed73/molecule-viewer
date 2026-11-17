@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {parseLammps, moleculeStyle, boxEdges, exportDimensions, pngDimensions, imageSvg, animationAngle, videoBitrate, animationWidths, gifMaxWidth} from '../assets/molecule-viewer.mjs';
 import {moleculeGeometry, lightDirection} from '../assets/molecule-scene.mjs';
 import {GIFEncoder, quantize, applyPalette} from '../assets/gifenc.mjs';
@@ -97,4 +98,17 @@ gif.writeFrame(applyPalette(rgba, palette), 2, 1, {palette, delay: 100});
 gif.finish();
 assert.equal(Buffer.from(gif.bytes().subarray(0, 6)).toString(), 'GIF89a');
 assert.equal(gif.bytes().at(-1), 0x3b);
-console.log('Molecule parser, style, and export checks passed');
+// Every example in the dropdown has a readable V2000 MOL file with matching counts.
+const page = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const exampleFiles = [...page.matchAll(/<option value="([^"]+\.mol)"/g)].map(match => match[1]);
+assert.ok(exampleFiles.length >= 20);
+for (const file of exampleFiles) {
+  const lines = readFileSync(new URL(`../assets/examples/${file}`, import.meta.url), 'utf8').split('\n');
+  assert.match(lines[3], /V2000/, file);
+  const [atoms, bonds] = [Number(lines[3].slice(0, 3)), Number(lines[3].slice(3, 6))];
+  assert.ok(atoms > 0, file);
+  for (const line of lines.slice(4, 4 + atoms)) assert.match(line.slice(31, 34).trim(), /^[A-Z][a-z]?$/, file);
+  assert.equal(lines[4 + atoms + bonds].startsWith('M  ') || lines[4 + atoms + bonds] === '', true, file);
+}
+
+console.log('Molecule parser, style, export, and example checks passed');

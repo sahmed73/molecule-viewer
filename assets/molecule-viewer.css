@@ -34,9 +34,8 @@
 .molecule-tool button:hover:not(:disabled) { border-color: var(--link); }
 .molecule-tool button:disabled { opacity: .5; cursor: not-allowed; }
 .molecule-tool button:focus-visible, .molecule-tool input:focus-visible, .molecule-tool select:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-.molecule-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
-.molecule-examples > span, .molecule-examples > small { flex-basis: 100%; }
-.molecule-examples > span { font-size: .84rem; font-weight: 600; }
+.molecule-examples { display: flex; flex-direction: column; gap: 6px; margin-top: 20px; }
+.molecule-examples select { width: 100%; }
 .molecule-appearance { min-width: 0; margin: 26px 0 0; padding: 12px; border: 1px solid var(--rule); border-radius: 4px; }
 .molecule-appearance legend { font-weight: 600; }
 .molecule-appearance label { font-size: .84rem; }
