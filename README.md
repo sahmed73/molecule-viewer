@@ -70,6 +70,12 @@ geometry, GIF encoding, and that every example in the dropdown has a valid MOL f
   the bundled `mp4-muxer` 5.2.2; browsers without WebCodecs fall back to real-time
   recording. GIFs use the bundled `gifenc`.
 
+## License
+
+MIT (see `LICENSE`): anyone may use, change, and share the code, including in other
+projects, as long as they keep the copyright notice. The bundled third-party files
+below keep their own licenses.
+
 ## Third-party code
 
 - `assets/mp4-muxer.mjs`: mp4-muxer 5.2.2, MIT license (`assets/mp4-muxer.LICENSE.md`).
